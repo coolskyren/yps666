@@ -6,7 +6,8 @@
           <img src="@/assets/images/public/arrow.jpg" alt />
         </a>
       </p>
-      <h2>商品分类</h2>
+      <h2>商品分类
+      </h2>
       <p>
         <i></i>
         <i></i>
