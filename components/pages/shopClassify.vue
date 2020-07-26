@@ -1,19 +1,6 @@
 <template>
   <div class="container">
-    <div class="head">
-      <p>
-        <a href="#" @click="goBack">
-          <img src="@/assets/images/public/arrow.jpg" alt />
-        </a>
-      </p>
-      <h2>商品分类
-      </h2>
-      <p>
-        <i></i>
-        <i></i>
-        <i></i>
-      </p>
-    </div>
+    <logoHeader></logoHeader>
     <div class="list">
       <div class="l">
         <ul>
@@ -40,6 +27,7 @@
   </div>
 </template>
 <script>
+import logoHeader from '@/common/head'
 export default {
   data() {
     return {
@@ -257,6 +245,9 @@ export default {
       }
     
   },
+  components:{
+    logoHeader
+  }
 };
 </script>
 <style scoped>
@@ -265,32 +256,7 @@ export default {
   margin: 0 auto;
   background-color: white;
 }
-.head {
-  height: 0.9rem;
-  display: flex;
-  justify-content: space-between;
-  background-color: #f26b11;
-  align-items: center;
-  font-size: 0.4rem;
-  color: white;
-  padding: 0 0.25rem 0 0.35rem;
-}
-.head h2 {
-  margin-left: 0.2rem;
-}
-.head p img {
-  width: 0.17rem;
-  height: 0.29rem;
-}
-.head p i {
-  display: inline-block;
-  width: 0.12rem;
-  height: 0.12rem;
-  border-radius: 100%;
-  background-color: white;
-  margin: 0 0.05rem;
-  vertical-align: 0.05rem;
-}
+
 .list {
   display: inline-flex;
 }
