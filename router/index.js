@@ -1,18 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-//一级路由
-/* import Foot from '@/components/pages/foot'
-import ShopClassify from '@/components/pages/shopClassify'
-import ShopDetail from '@/components/pages/shopdetail'
-//二级路由
-import Home from '@/components/views/index/home'
-import ShopCar from '@/components/views/shopCar'
-import Mine from '@/components/views/mine'
-import ShopOrder from '@/components/views/shopOrder'
-import ShopSearch from '@/components/views/shopSearch' */
 Vue.use(Router)
 
 export default new Router({
+  mode:'history',
   routes: [
     {
       path:'/foot',
@@ -21,18 +12,30 @@ export default new Router({
           {
             path:'/home',
             component:()=>import('@/components/views/index/home'),
+            meta:{
+              name:'首页'
+            }
           },
           {
             path:'/shopcar',
             component:()=>import('@/components/views/shopCar'),
+            meta:{
+              name:'购物车'
+            }
           },
           {
             path:'/mine',
             component:()=>import('@/components/views/mine'),
+            meta:{
+              name:'我的订单'
+            }
           },
           {
             path:'/order',
             component:()=>import('@/components/views/shopOrder'),
+            meta:{
+              name:'确认订单'
+            }
           },
           {
             path:'/search',
@@ -47,10 +50,31 @@ export default new Router({
     {
       path:'/classify',
       component:()=>import('@/components/pages/shopClassify'),
+      meta:{
+        name:'商品列表'
+      }
     },
     {
       path:'/detail',
       component:()=>import('@/components/pages/shopdetail'),
+      meta:{
+        name:'商品详情'
+      }
+    },
+    {
+      path:'/login',
+      component:()=>import('@/components/pages/login'),
+      meta:{
+        name:'登录'
+      }
+    },
+    
+    {
+      path:'/index',
+      component:()=>import('@/components/pages/index'),
+      meta:{
+        name:'注册'
+      }
     },
     {
       path:"",
@@ -59,3 +83,16 @@ export default new Router({
     
   ]
 })
+// const router = new Router({
+  
+// })
+// router.beforeEach((to, from, next) => {
+//   if(to.path == '/login'){
+//     next()
+//     return
+//   }
+//   if(!sessionStorage.getItem('userInfo')){
+//     next('/login')
+//   }
+//   next()
+// })

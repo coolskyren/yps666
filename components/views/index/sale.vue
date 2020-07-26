@@ -56,7 +56,23 @@
   </div>
 </template>
 <script>
-export default {};
+import {getIndexseckill} from '@/util/axios'
+export default {
+  data() {
+    return {
+      seckList:[]
+    }
+  },
+  mounted() {
+    getIndexseckill()
+    .then(res =>{
+      console.log(res)
+      if (res.data.code == 200) {
+          this.seckList = res.data.list;
+        }
+      });
+  },
+};
 </script>
 <style scoped>
 .sale {

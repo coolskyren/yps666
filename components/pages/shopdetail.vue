@@ -37,7 +37,8 @@
                 <p><i>共1000+条评论</i><a href="#">查看更多></a></p>
             </div>
             <div class="foot">
-                <p><a href="#"><img src="@/assets/images/public/icon_7.jpg" alt=""><i>购物车</i></a></p>
+                <router-link to='/shopCar'>
+                <p><a href="#" ><img src="@/assets/images/public/icon_7.jpg" alt=""><i>购物车</i></a></p></router-link>
                 <b><router-link to="/shopcar">加入购物车</router-link></b>
                 <span><router-link to="/order">立即购买</router-link></span>
             </div>
