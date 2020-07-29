@@ -1,10 +1,6 @@
 <template>
     <div class="container">
-        <div class="head">
-            <p @click="goBack"><img src="@/assets/images/list_images/arrow.jpg" alt=""></p>
-            <h2><img src="@/assets/images/list_images/logo.jpg" alt=""></h2>
-            <p><i></i><i></i><i></i></p>
-        </div>
+        <logoHeader></logoHeader>
         <div class="search">
             <img src="@/assets/images/list_images/search.jpg" alt="">
             <input type="text" placeholder="搜索商品">
@@ -30,6 +26,7 @@
         </div>
 </template>
 <script>
+import logoHeader from "@/common/head";
 export default {
     data() {
         return {
@@ -70,6 +67,9 @@ export default {
         this.$router.go(-1);
       }
     },
+    components: {
+    logoHeader,
+  },
 }
 </script>
 <style scoped>

@@ -1,58 +1,118 @@
 <template>
-    <div class="container">
-        <div class="head">
-            <p><a href="#" @click="goBack"><img src="@/assets/images/public/arrow.jpg" alt=""></a></p>
-            <h2>商品详情</h2>
-            <p><i></i><i></i><i></i></p>
-        </div>
-        <div class="main1">
-                <img src="@/assets/images/detail_images/pic_8.jpg" alt="">
-                <p>
-                    雅芝贵妇素颜霜 贵妇膏神仙膏补水保湿懒人霜遮瑕珍珠膏
-                    <br>
-                    <i>￥123.00</i><b>(此价格不与套装优惠同时享受)</b>
-                </p>
-        </div>
-        <div class="main2">
-                <div class="top"><p>促销：<i>满减</i>满2件9折；3件8折</p><b></b></div>
-                <div class="middle"><i>购买数量</i>
-                    <p><i>-</i><i>1</i><i>+</i></p>
-                </div>
-                <div class="bottom">
-                    <p><i>商品属性</i><b></b></p><br>
-                    <i>规格</i><b>30g</b><span>5g</span>
-                </div>
-        </div>
-        <div class="main3">
-                <h2>商品详情</h2>
-                <img src="@/assets/images/detail_images/pic_3.jpg" alt="">
-                <img src="@/assets/images/detail_images/pic_4.jpg" alt="">
-                <img src="@/assets/images/detail_images/pic_5.jpg" alt="">
-        </div>
-        <div class="main4">
-            <div class="inner">
-                <h2>商品评价</h2>
-                <textarea name="pingjia" id="" cols="40" rows="10" placeholder="请输入评价"></textarea>
-                <input type="datetime-local" name="datetime">
-                <p><i>共1000+条评论</i><a href="#">查看更多></a></p>
-            </div>
-            <div class="foot">
-                <router-link to='/shopCar'>
-                <p><a href="#" ><img src="@/assets/images/public/icon_7.jpg" alt=""><i>购物车</i></a></p></router-link>
-                <b><router-link to="/shopcar">加入购物车</router-link></b>
-                <span><router-link to="/order">立即购买</router-link></span>
-            </div>
-        </div>
+  <div class="container">
+    <logoHeader></logoHeader>
+    <div class="main1">
+      <img :src="$imgUrl+detailInfo.img" alt />
+      <p>
+        <span v-html="detailInfo.description"></span>
+        <br />
+        <i>￥{{detailInfo.market_price}}</i>
+        <b>(此价格不与套装优惠同时享受)</b>
+      </p>
     </div>
+    <div class="main2">
+      <div class="top">
+        <p>
+          促销：
+          <i>满减</i>满2件9折；3件8折
+        </p>
+        <b></b>
+      </div>
+      <div class="middle">
+        购买数量
+        <van-stepper v-model="num" />
+      </div>
+      <div class="bottom">
+        <p>
+          <i>商品属性</i>
+          <b></b>
+        </p>
+        <br />
+        <i>规格</i>
+        <b v-for="item in detail" :key="item">{{item}}</b>
+      </div>
+    </div>
+    <div class="main3">
+      <h2>商品详情</h2>
+      <img :src="$imgUrl+detailInfo.img" alt />
+      <img :src="$imgUrl+detailInfo.img" alt />
+      <img :src="$imgUrl+detailInfo.img" alt />
+    </div>
+    <div class="main4">
+      <div class="inner">
+        <h2>商品评价</h2>
+        <textarea name="pingjia" id cols="40" rows="10" placeholder="请输入评价"></textarea>
+        <input type="datetime-local" name="datetime" />
+        <p>
+          <i>共1000+条评论</i>
+          <a href="#">查看更多></a>
+        </p>
+      </div>
+      <div class="foot">
+        <router-link to="/shopCar">
+          <p>
+            <a href="#">
+              <img src="@/assets/images/public/icon_7.jpg" alt />
+              <i>购物车</i>
+            </a>
+          </p>
+        </router-link>
+        <b @click="onCar" >加入购物车</b>
+        <span @click="onCar">立即购买</span>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
+import logoHeader from "@/common/head";
+import { getGoodsinfo, getCartadd } from "@/util/axios";
 export default {
-    methods: {
-        goBack(){
-            this.$router.go(-1)
+  data() {
+    return {
+      num: 1,
+      detailInfo: {},
+      detail:[]
+    };
+  },
+  mounted() {
+    this.getGoodsDetail();
+  },
+  methods: {
+    getGoodsDetail() {
+      getGoodsinfo({
+        id: this.$route.query.id,
+      }).then((res) => {
+        if (res.data.code == 200) {
+          this.detailInfo = res.data.list[0];
+          this.detail = this.detailInfo.specsattr.split(',')
         }
+      });
     },
-}
+    onCar() {
+      let isLogin =JSON.parse(sessionStorage.getItem('userInfo')) ? true: false
+      if(isLogin){
+      getCartadd({
+        uid: JSON.parse(sessionStorage.getItem("userInfo")).uid,
+        goodsid: this.$route.query.id,
+        num: this.num,
+      }).then((res) => {
+        if (res.data.code == 200) {
+          this.$router.push("/shopcar");
+        } else {
+          Toast(res.data.msg);
+        }
+      });
+      }else{
+          Toast('请先登录')
+                //跳转到登录页面
+                this.$router.push('/login')
+      }
+    }
+  },
+  components: {
+    logoHeader,
+  },
+};
 </script>
 <style scoped>
 .container {

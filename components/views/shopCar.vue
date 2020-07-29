@@ -1,26 +1,14 @@
 <template>
   <div class="container">
-    <div class="head">
-      <p>
-        <a href="#">
-          <img src="../../assets/images/public/arrow.jpg" alt />
-        </a>
-      </p>
-      <h2>购物车</h2>
-      <p>
-        <i></i>
-        <i></i>
-        <i></i>
-      </p>
-    </div>
+    <logoHeader></logoHeader>
     <ul class="pro-list">
       <li v-for="item in carList" :key="item.id">
         <i class="checked"></i>
-        <img src="item.img" alt />
+        <img :src="$imgUrl+item.img" alt />
         <p>
-          <span class="pro-name">{{item.name}}</span>
+          <span class="pro-name">{{item.goodsname}}</span>
           <span class="pro-des">规格：50g</span>
-          <span class="pro-price">￥199.00</span>
+          <span class="pro-price">￥{{item.price}}</span>
         </p>
         <div class="count-group">
           <input type="button" value="-" />
@@ -38,46 +26,55 @@
         </div>
         <div class="r">
           总计：
-          <b>163.00</b>
+          <b>{{price*num}}</b>
           <br />
           <span>不含运费，已优惠￥0.00</span>
         </div>
       </div>
-      <router-link  to="/order"><input type="submit" value="去结算(2件)"/></router-link>
+      <router-link  to="/order"><input type="submit" value="去结算"/></router-link>
       
     </div>
   </div>
 </template>
 <script>
+import logoHeader from "@/common/head";
+import { Toast } from 'vant'
+import { getCarlist } from '@/util/axios'
+import { cartlist } from '../../../../../../../web第四阶段/day19/笔记/demo/src/util/axios';
 export default {
   data() {
     return {
       num: 1,
-      carList: [
-        {
-          id: 1,
-          name: "欧莱雅面霜",
-          describe: "50g",
-          price: 199,
-          img: require("../../assets/images/shoping_car_images/shop.jpg")
-        },
-        {
-          id: 2,
-          name: "欧莱雅面霜",
-          describe: "50g",
-          price: 199,
-          img: require("../../assets/images/shoping_car_images/shop.jpg")
-        },
-        {
-          id: 3,
-          name: "欧莱雅面霜",
-          describe: "50g",
-          price: 199,
-          img: require("../../assets/images/shoping_car_images/shop.jpg")
-        }
-      ]
+      carList: [],
+      price:0
     };
-  }
+  },
+  mounted() {
+    this.getCarList()
+  },
+  methods: {
+    getCarList() {
+            getCarlist({
+                uid: JSON.parse(sessionStorage.getItem('userInfo')).uid,
+            }).then((res) => {
+              console.log(res)
+                if (res.data.code == 200) {
+                    console.log(res, '返回值')
+                    this.carList = res.data.list
+                    this.carList.map(item=>{
+                        item.status = item.status==1 ? true :false
+                    })
+                    this.price = Number(this.carList[0].price)
+                    console.log(this.price)
+                } else {
+                }
+            })
+        },
+       
+  },
+  components: {
+    logoHeader,
+  },
 };
 </script>
 <style  scoped>

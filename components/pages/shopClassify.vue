@@ -4,250 +4,89 @@
     <div class="list">
       <div class="l">
         <ul>
-          <li v-for="(item,idx) in classIfy" :key="item.id">
-            <a href="#" @click="select(idx)" :class="[idx==num?'select1':'']">{{item.name}}</a>
+          <li v-for="(item,idx) in firstList" :key="item.id">
+            <a href="#" @click="onChange(idx)" :class="[idx==num?'select1':'']">{{item.catename}}</a>
           </li>
         </ul>
       </div>
       <div class="r">
-        <div v-for="namelist in classIfy[num].classList" :key="namelist.id">
-            <h3>
-          <i>{{namelist.name}}</i>
-          <a href="#">更多></a>
-        </h3> 
+        <div v-for="namelist in secondList" :key="namelist.id">
+          <h3>
+            <i>{{namelist.catename}}</i>
+            <a href="#">更多></a>
+          </h3>
+        </div>
         <div class="inner">
-          <a href="#" v-for="(ify) in namelist.list" :key="ify.id">
-            <img :src="ify.img" alt />
-            <p>{{ify.name}}</p>
-          </a>
-        </div>
-        </div>
+            <a href="#" v-for="goods in goodsList" :key="goods.id" @click.stop="goDetail(goods.id)">
+              <img :src="$imgUrl +goods.img" alt />
+              <p>{{goods.goodsname}}</p>
+            </a>
+          </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import logoHeader from '@/common/head'
+import logoHeader from "@/common/head";
+import { getCatetree,getIndexgoods } from "@/util/axios";
 export default {
   data() {
     return {
-        num:0,
-      classIfy: [
-        {
-          id: 1,
-          name: "施华蔻",
-          classList: [
-            {
-              id: 1,
-              name: "洗发类",
-              list: [
-                {
-                  id: 1,
-                  name: "护亮泽洗发水",
-                  img: require("@/assets/images/classify/产品分类1 (1).jpg")
-                },
-                {
-                  id: 2,
-                  name: "滋养洗发水",
-                  img: require("@/assets/images/classify/产品分类1 (2).jpg")
-                },
-                {
-                  id: 3,
-                  name: "柔顺洗发水",
-                  img: require("@/assets/images/classify/产品分类1 (3).jpg")
-                },
-                {
-                  id: 4,
-                  name: "去屑洗发水",
-                  img: require("@/assets/images/classify/产品分类1 (4).jpg")
-                },
-                {
-                  id: 5,
-                  name: "柔顺洗发水",
-                  img: require("@/assets/images/classify/产品分类1 (5).jpg")
-                },
-                {
-                  id: 6,
-                  name: "幻彩洗发水",
-                  img: require("@/assets/images/classify/产品分类1 (6).jpg")
-                }
-              ]
-            },
-            {
-              id: 2,
-              name: "染色类",
-              list: [
-                {
-                  id: 1,
-                  name: "施华蔻染色",
-                  img: require("@/assets/images/classify/产品分类1 (7).jpg")
-                },
-                {
-                  id: 2,
-                  name: "施华蔻双养乳",
-                  img: require("@/assets/images/classify/产品分类1 (8).jpg")
-                },
-                {
-                  id: 3,
-                  name: "施华蔻染发膏",
-                  img: require("@/assets/images/classify/产品分类1 (9).jpg")
-                },
-                {
-                  id: 4,
-                  name: "滋养洗发水",
-                  img: require("@/assets/images/classify/产品分类1 (7).jpg")
-                },
-                {
-                  id: 5,
-                  name: "施华蔻染发膏",
-                  img: require("@/assets/images/classify/产品分类1 (8).jpg")
-                },
-                {
-                  id: 6,
-                  name: "施华蔻染发膏",
-                  img: require("@/assets/images/classify/产品分类1 (9).jpg")
-                }
-              ]
-            }
-          ]
-        },
-        {
-          id: 2,
-          name: "沙宣",
-          classList: [
-            {
-              id: 1,
-              name: "洗发类",
-              list: [
-                {
-                  id: 1,
-                  name: "护亮泽洗发水",
-                  img: require("@/assets/images/classify/产品分类1 (4).jpg")
-                },
-                {
-                  id: 2,
-                  name: "护亮泽洗发水",
-                  img: require("@/assets/images/classify/产品分类1 (3).jpg")
-                },
-                {
-                  id: 3,
-                  name: "护亮泽洗发水",
-                  img: require("@/assets/images/classify/产品分类1 (7).jpg")
-                },
-                {
-                  id: 4,
-                  name: "护亮泽洗发水",
-                  img: require("@/assets/images/classify/产品分类1 (3).jpg")
-                },
-                {
-                  id: 5,
-                  name: "护亮泽洗发水",
-                  img: require("@/assets/images/classify/产品分类1 (5).jpg")
-                },
-                {
-                  id: 6,
-                  name: "护亮泽洗发水",
-                  img: require("@/assets/images/classify/产品分类1 (6).jpg")
-                }
-              ]
-            },
-            {
-              id: 2,
-              name: "染色类",
-              list: [
-                {
-                  id: 1,
-                  name: "施华蔻染色",
-                  img: require("@/assets/images/classify/产品分类1 (7).jpg")
-                },
-                {
-                  id: 2,
-                  name: "施华蔻染色",
-                  img: require("@/assets/images/classify/产品分类1 (8).jpg")
-                },
-                {
-                  id: 3,
-                  name: "施华蔻染色",
-                  img: require("@/assets/images/classify/产品分类1 (9).jpg")
-                },
-                {
-                  id: 4,
-                  name: "施华蔻染色",
-                  img: require("@/assets/images/classify/产品分类1 (7).jpg")
-                },
-                {
-                  id: 5,
-                  name: "施华蔻染色",
-                  img: require("@/assets/images/classify/产品分类1 (8).jpg")
-                },
-                {
-                  id: 6,
-                  name: "施华蔻染色",
-                  img: require("@/assets/images/classify/产品分类1 (9).jpg")
-                }
-              ]
-            }
-          ]
-        },
-        {
-          id: 3,
-          name: "欧莱雅"
-        },
-        {
-          id: 4,
-          name: "潘婷"
-        },
-        {
-          id: 5,
-          name: "资生堂"
-        },
-        {
-          id: 6,
-          name: "阿道夫"
-        },
-        {
-          id: 7,
-          name: "卡诗"
-        },
-        {
-          id: 8,
-          name: "海飞丝"
-        },
-        {
-          id: 9,
-          name: "资生堂"
-        },
-        {
-          id: 10,
-          name: ""
-        },
-        {
-          id: 11,
-          name: ""
-        },
-        {
-          id: 12,
-          name: ""
-        },
-        {
-          id: 13,
-          name: ""
-        }
-      ]
+      num: 0,
+      firstList: [],
+      secondList: [],
+      goodsList:[]
     };
   },
-  methods: {
-      select(i){
-          this.num = i
-      },
-      goBack(){
-        this.$router.go(-1);
-      }
-    
+  mounted() {
+    // this.getCateTree();
+    this.getGoods();
+    getCatetree().then((res) => {
+        console.log(res, "1111");
+        if (res.data.code == 200) {
+          this.firstList = res.data.list;
+          this.secondList = this.firstList[this.num].children;
+          console.log(this.firstList,'112')
+        }
+      });
+    console.log(this.firstList)
   },
-  components:{
-    logoHeader
-  }
+  methods: {
+    /* getCateTree() {
+      getCatetree().then((res) => {
+        console.log(res, "1111");
+        if (res.data.code == 200) {
+          this.firstList = res.data.list;
+          this.secondList = this.firstList[this.num].children;
+        }
+      });
+    }, */
+    getGoods() {
+      getIndexgoods(
+        ).then((res) => {
+        console.log(res,'222');
+        if (res.data.code == 200) {
+          this.goodsList = res.data.list;
+          console.log(this.goodsList,'333')
+        }
+      }); 
+    },
+    onChange(i) {
+      this.num = i;
+      this.secondList = this.firstList[this.num].children;
+    },
+    goDetail(id) {
+      this.$router.push({
+        path: "/detail",
+        query: {
+          id,
+        },
+      });
+    },
+  },
+  components: {
+    logoHeader,
+  },
 };
 </script>
 <style scoped>

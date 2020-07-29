@@ -1,19 +1,7 @@
 <template>
   <div class="container">
     <div class="wrap">
-      <div class="head">
-        <p>
-          <a href="#">
-            <img src="@/assets/images/public/arrow.jpg" alt />
-          </a>
-        </p>
-        <h2>我的订单</h2>
-        <p>
-          <i></i>
-          <i></i>
-          <i></i>
-        </p>
-      </div>
+     <logoHeader></logoHeader>
       <div class="head2">
         <div class="pic">
           <img src="@/assets/images/mine_images/head.jpg" alt />
@@ -100,12 +88,39 @@
         </ul>
       </div>
     </div>
+    <div class="userInfo">
+            <div class="name">{{userInfo.nickname}}</div>
+            <van-button v-if="userInfo.nickname" type="primary" @click="quit">退出登录</van-button>
+            <van-button v-else type="primary" @click="$router.push('/login')">未登录</van-button>
+      </div>
   </div>
 </template>
 <script>
-export default {};
+import logoHeader from "@/common/head";
+export default {
+  data() {
+    return {
+      userInfo:{}
+    }
+  },
+  mounted() {
+    this.userInfo = sessionStorage.getItem('userInfo') ? JSON.parse(sessionStorage.getItem('userInfo')):{}
+  },
+  methods: {
+    quit(){
+      sessionStorage.removeItem('userInfo')
+            this.userInfo = {}
+    }
+  },
+  components: {
+    logoHeader,
+  },
+};
 </script>
 <style scoped>
+.userInfo{
+  text-align: center;
+}
 .container {
   width: 7.5rem;
   margin: 0 auto;

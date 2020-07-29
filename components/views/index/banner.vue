@@ -1,7 +1,7 @@
 <template>
   <div class="banner">
     <van-swipe class="my-swipe" :autoplay="bannerTime" indicator-color="white">
-      <van-swipe-item v-for="item in bannerList" :key="item.id"><img @click="shopList" :src="$imgUrl + item.img" alt=""></van-swipe-item>
+      <van-swipe-item v-for="item in bannerList" :key="item.id"><img  :src="$imgUrl + item.img" alt=""></van-swipe-item>
       
     </van-swipe>
   </div>
@@ -17,6 +17,7 @@ export default {
   },
   mounted() {
       getIndexbanner().then(res => {
+        console.log(res)
         if (res.data.code == 200) {
           this.bannerList = res.data.list;
         }

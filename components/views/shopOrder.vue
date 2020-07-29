@@ -1,11 +1,7 @@
 <template>
     <div class="container">
         <div class="wrap">
-            <div class="head">
-                <p><a href="#"><img src="@/assets/images/public/arrow.jpg" alt=""></a></p>
-                <h2>确认订单</h2>
-                <p><i></i><i></i><i></i></p>
-            </div>
+            <logoHeader></logoHeader>
             <div class="ad">
                 <div class="inner">
                     <p><i>收货人：YouSu</i><b>10000000000</b></p>
@@ -47,8 +43,16 @@
     </div>
 </template>
 <script>
+import logoHeader from "@/common/head";
 export default {
-    
+    data() {
+      return {
+        
+      }
+    },
+    components: {
+    logoHeader,
+  },
 }
 </script>
 <style scoped>

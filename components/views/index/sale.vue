@@ -66,7 +66,7 @@ export default {
   mounted() {
     getIndexseckill()
     .then(res =>{
-      console.log(res)
+      console.log(res,'限时秒杀')
       if (res.data.code == 200) {
           this.seckList = res.data.list;
         }

@@ -15,6 +15,7 @@
     <van-form @submit="onSubmit" class="login" >
       <van-field
         v-model="userInfo.phone"
+        type="phone"
         name="手机号"
         label="手机号"
         placeholder="手机号"
@@ -37,7 +38,7 @@
 
 <script>
 import {getUserlogin} from '@/util/axios'
-
+import { Toast } from 'vant'
 export default {
   data() {
     return {
@@ -45,7 +46,8 @@ export default {
             phone:'',
             password:''
         },
-          pattern:/^1[3456789]\d{9}$/,
+
+        pattern:/^1[3456789]\d{9}$/,
         //   pattern:/^[a-zA-Z]\w{5,17}$/
         };
       },
@@ -54,10 +56,15 @@ export default {
         if(values){
             getUserlogin(this.userInfo)
             .then(res =>{
+              
              if (res.data.code == 200) {
+               Toast.success(res.msg)
               sessionStorage.setItem('userInfo',JSON.stringify(res.data.list))
               this.$router.push("/home");
-            } else {
+            } else if(res.data.code == 500){
+              Toast.fail(res.data.msg)
+            }else{
+              Toast.fail(res.data.msg)
             }
         })
         }else{

@@ -35,7 +35,7 @@
         :rules="[{ required: true, message: '请填写密码' }]"
       />
       <div style="margin: 16px;">
-        <van-button round block type="info" native-type="submit">提交</van-button>
+        <van-button round block type="info" native-type="submit">注册</van-button>
       </div>
     </van-form>
   </div>
@@ -43,17 +43,14 @@
 
 <script>
 import { getUserregister } from "@/util/axios";
+import { Toast } from 'vant'
 export default {
   data() {
     return {
       userInfo: {
-        uid: "",
         nickname: "",
         phone: "",
         password: "",
-        randstr: "",
-        addtime: "",
-        status: "1",
       },
       pattern: /^1[3456789]\d{9}$/,
     };
@@ -64,11 +61,13 @@ export default {
         getUserregister(this.userInfo).then((res) => {
           console.log(res);
           if (res.data.code == 200) {
-            // this.$message.success(res.data.msg);
-            this.$router.push("/home");
-          } else {
-            // this.$message.error(res.data.msg);
-          }
+            Toast.success(res.msg)
+            this.$router.push("/login");
+          } else if(res.data.code == 500){
+            Toast.fail(res.msg)
+          }else {
+                    Toast.fail(res.msg)
+                }
         });
       } else {
         return false;
