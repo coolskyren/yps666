@@ -54,11 +54,8 @@ export function getCarlist(params){
 export function getCartadd(data){
     return http.post('/cartadd',data)   
 }
-//购物车修改
-export function getCartedit(data){
-    return http.post('/cartedit',data)   
-}
+
 //购物车删除
 export function getCardelete(data){
-    return http.post('/cardelete',data)   
+    return http.post('/cartdelete',data)   
 }

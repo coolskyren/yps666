@@ -8,9 +8,7 @@
           </h3>
           <p class="des">每天零点 好货秒不停</p>
           <p class="time">
-            <span>19</span>:
-            <span>30</span>:
-            <span>29</span>
+            <van-count-down :time="time" />
             <i>秒杀</i>
           </p>
           <img class="pic" src="@/assets/images/index_images/shop_5.jpg" alt />
@@ -60,6 +58,7 @@ import {getIndexseckill} from '@/util/axios'
 export default {
   data() {
     return {
+      time: 30 * 60 * 60 * 1000,
       seckList:[]
     }
   },

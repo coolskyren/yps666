@@ -2,78 +2,103 @@
   <div class="container">
     <logoHeader></logoHeader>
     <ul class="pro-list">
-      <li v-for="item in carList" :key="item.id">
-        <i class="checked"></i>
-        <img :src="$imgUrl+item.img" alt />
-        <p>
-          <span class="pro-name">{{item.goodsname}}</span>
-          <span class="pro-des">规格：50g</span>
-          <span class="pro-price">￥{{item.price}}</span>
-        </p>
-        <div class="count-group">
-          <input type="button" value="-" />
-          <input type="text" v-model="num" />
-          <input type="button" value="+" />
-        </div>
-        <div class="del">删除</div>
-      </li>
+      
+      <van-swipe-cell v-for="item in carList" :key="item.id">
+        <li >
+          <van-checkbox v-model="checked"></van-checkbox>
+          <img :src="$imgUrl+item.img" alt />
+          <p>
+            <span class="pro-name">{{item.goodsname}}</span>
+            <span class="pro-des">规格：50g</span>
+            <span class="pro-price">￥{{item.price}}</span>
+          </p>
+          <div class="count-group">
+            <van-stepper v-model="item.num" />
+          </div>
+          <van-cell :border="false" title="单元格" value="内容" />
+          </li>
+          <template #right >
+            <van-button @click="del(item.id)" style="height:100%" square type="danger" text="删除" />
+          </template>
+        
+      </van-swipe-cell>
     </ul>
     <div class="all-shop">
       <div class="lift">
         <div class="l">
-          <i></i>
-          <b>全选</b>
+          <van-checkbox v-model="checkedAll" @change="check">全选</van-checkbox>
         </div>
         <div class="r">
           总计：
-          <b>{{price*num}}</b>
+          <b>￥{{all.toFixed(2)}}</b>
           <br />
           <span>不含运费，已优惠￥0.00</span>
         </div>
       </div>
-      <router-link  to="/order"><input type="submit" value="去结算"/></router-link>
-      
+      <router-link to="/order">
+        <input type="submit" value="去结算" />
+      </router-link>
     </div>
   </div>
 </template>
 <script>
 import logoHeader from "@/common/head";
-import { Toast } from 'vant'
-import { getCarlist } from '@/util/axios'
-import { cartlist } from '../../../../../../../web第四阶段/day19/笔记/demo/src/util/axios';
+import { Toast } from "vant";
+import { getCarlist,getCardelete } from "@/util/axios";
+
 export default {
   data() {
     return {
-      num: 1,
+      checkedAll: true,
+      checked: true,
       carList: [],
-      price:0
     };
   },
   mounted() {
-    this.getCarList()
+    this.getCarList();
   },
   methods: {
     getCarList() {
-            getCarlist({
-                uid: JSON.parse(sessionStorage.getItem('userInfo')).uid,
-            }).then((res) => {
-              console.log(res)
-                if (res.data.code == 200) {
-                    console.log(res, '返回值')
-                    this.carList = res.data.list
-                    this.carList.map(item=>{
-                        item.status = item.status==1 ? true :false
-                    })
-                    this.price = Number(this.carList[0].price)
-                    console.log(this.price)
-                } else {
-                }
-            })
-        },
-       
+      getCarlist({
+        uid: JSON.parse(sessionStorage.getItem("userInfo")).uid,
+      }).then((res) => {
+        console.log(res);
+        if (res.data.code == 200) {
+          console.log(res, "返回值");
+          this.carList = res.data.list;
+          this.carList.map((item) => {
+            item.status = item.status == 1 ? true : false;
+          });
+        } else {
+        }
+      });
+    },
+    del(id){
+      getCardelete(id)
+      .then(res=>{
+        console.log(res)
+        if(res.data.code == 200){
+          this.getCarList();
+        }
+      })
+    },
+    check() {
+      this.checked = this.checkedAll;
+    },
   },
   components: {
     logoHeader,
+  },
+  computed: {
+    all() {
+      let sum = 0;
+      this.carList.map((item, index, arr) => {
+        if (this.checked == true) {
+          sum += item.price * item.num;
+        }
+      });
+      return sum;
+    },
   },
 };
 </script>
@@ -172,7 +197,7 @@ export default {
   width: 2.12rem;
   height: 0.6rem;
   box-sizing: border-box;
-  border: 1px solid #333333;
+  /* border: 1px solid #333333; */
   border-radius: 0.05rem;
   line-height: 0.6rem;
   margin-top: 0.58rem;

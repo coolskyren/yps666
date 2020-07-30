@@ -1,152 +1,62 @@
 <template>
-    <div class="list">
-            <div class="wrap">
-                <div class="top">
-                    <i v-for = '(item,idx) in shopList' @click = 'select(idx)' :class = "[idx==num?'changeColor':'']" :key = 'item.id'>{{item.title}}</i>
-                </div>
-                <router-link to="/detail">
-                <div  class="main" v-for = '(list) in shopList[num].list' :key = 'list.id'>
-                    <img :src='list.src' alt="">
-                    <ul>
-                        <li>{{list.name}}</li>
-                        <li><i>￥</i>{{list.price}}</li>
-                        <li>已售{{list.sell}}件</li>
-                        <li><a href="#">立即抢购</a></li>
-                    </ul>
-                </div>
-                </router-link>
-                
-            </div>
-            
+  <div class="list">
+    <div class="wrap">
+      <div class="top">
+        <i
+          v-for="(item,idx) in firstList"
+          @click="select(idx)"
+          :class="[idx==num?'changeColor':'']"
+          :key="item.id"
+        >{{item.catename}}</i>
+      </div>
+        <div class="main" v-for="(list) in secondList" :key="list.id" @click.stop="goDetail(list.id)">
+          <img :src="$imgUrl + list.img" alt />
+          <ul>
+            <li>{{list.catename}}</li>
+            <!-- <li><i>￥</i>{{list.price}}</li> -->
+            <!-- <li>已售{{list.sell}}件</li> -->
+            <li>
+              <a href="#">立即抢购</a>
+            </li>
+          </ul>
         </div>
+    </div>
+  </div>
 </template>
 <script>
+import { getCatetree } from "@/util/axios";
 export default {
-    data() {
-        return {
-            num : 0,
-            shopList:[
-                {
-                    id:1,
-                    title:'热门推荐',
-                    list:[
-                        {
-                            id:1,
-                            src:require('@/assets/images/images/产品分类_03.jpg'),
-                            name:'雅诗兰黛染发膏60ml',
-                            price:'123.00',
-                            sell:'800'
-                        },
-                        {
-                            id:2,
-                            src:require('@/assets/images/images/产品分类_03.jpg'),
-                            name:'雅诗兰黛染发膏60ml',
-                            price:'123.00',
-                            sell:'800'
-                        },
-                        {
-                            id:3,
-                            src:require('@/assets/images/images/产品分类_03.jpg'),
-                            name:'雅诗兰黛染发膏60ml',
-                            price:'123.00',
-                            sell:'800'
-                        }
-                    ]
-
-                },
-                {
-                    id:2,
-                    title:'发现好货',
-                    list:[
-                        {
-                            id:1,
-                            src:require('@/assets/images/images/产品分类_05.jpg'),
-                            name:'雅诗兰黛染发膏60ml',
-                            price:'235.00',
-                            sell:'656'
-                        },
-                        {
-                            id:2,
-                            src:require('@/assets/images/images/产品分类_05.jpg'),
-                            name:'雅诗兰黛染发膏60ml',
-                            price:'235.00',
-                            sell:'656'
-                        },
-                        {
-                            id:3,
-                            src:require('@/assets/images/images/产品分类_05.jpg'),
-                            name:'雅诗兰黛染发膏60ml',
-                            price:'235.00',
-                            sell:'656'
-                        }
-                    ]
-
-                },
-                {
-                    id:3,
-                    title:'只看专场',
-                    list:[
-                        {
-                            id:1,
-                            src:require('@/assets/images/images/产品分类_13.jpg'),
-                            name:'雅诗兰黛染发膏60ml',
-                            price:'5555.00',
-                            sell:'85421'
-                        },
-                        {
-                            id:2,
-                            src:require('@/assets/images/images/产品分类_13.jpg'),
-                            name:'雅诗兰黛染发膏60ml',
-                            price:'5555.00',
-                            sell:'85421'
-                        },
-                        {
-                            id:3,
-                            src:require('@/assets/images/images/产品分类_13.jpg'),
-                            name:'雅诗兰黛染发膏60ml',
-                            price:'5555.00',
-                            sell:'85421'
-                        }
-                    ]
-
-                },
-                {
-                    id:4,
-                    title:'只看商品',
-                    list:[
-                        {
-                            id:1,
-                            src:require('@/assets/images/images/产品分类_18.jpg'),
-                            name:'雅诗兰黛染发膏60ml',
-                            price:'132.421',
-                            sell:'9854'
-                        },
-                        {
-                            id:2,
-                            src:require('@/assets/images/images/产品分类_18.jpg'),
-                            name:'雅诗兰黛染发膏60ml',
-                            price:'132.421',
-                            sell:'9854'
-                        },
-                        {
-                            id:3,
-                            src:require('@/assets/images/images/产品分类_18.jpg'),
-                            name:'雅诗兰黛染发膏60ml',
-                            price:'132.421',
-                            sell:'9854'
-                        }
-                    ]
-
-                }
-            ]
-        }
+  data() {
+    return {
+      num: 0,
+      firstList: [],
+      secondList: [],
+    };
+  },
+  mounted() {
+    getCatetree().then((res) => {
+      console.log(res, "1111");
+      if (res.data.code == 200) {
+        this.firstList = res.data.list;
+        this.secondList = this.firstList[this.num].children;
+      }
+    });
+  },
+  methods: {
+    select(i) {
+      this.num = i;
+      this.secondList = this.firstList[this.num].children;
     },
-    methods:{
-            select(i){
-                this.num = i;
-            }
-        }
-}
+    goDetail(id) {
+      this.$router.push({
+        path: "/detail",
+        query: {
+          id,
+        },
+      });
+    }
+  },
+};
 </script>
 <style scoped>
 .wrap {
@@ -171,8 +81,8 @@ export default {
 }
 .list .wrap .top i:first-child {
   border-left: 1px solid #d0d0d0;
-} 
-.changeColor{
+}
+.changeColor {
   border: 0;
   background-color: #f26b11;
   color: #ffffff;

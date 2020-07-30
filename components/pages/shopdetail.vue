@@ -57,13 +57,14 @@
             </a>
           </p>
         </router-link>
-        <b @click="onCar" >加入购物车</b>
+        <b @click="addCar" >加入购物车</b>
         <span @click="onCar">立即购买</span>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { Toast } from 'vant'
 import logoHeader from "@/common/head";
 import { getGoodsinfo, getCartadd } from "@/util/axios";
 export default {
@@ -104,7 +105,25 @@ export default {
       });
       }else{
           Toast('请先登录')
-                //跳转到登录页面
+                this.$router.push('/login')
+      }
+    },
+    addCar(){
+      let isLogin =JSON.parse(sessionStorage.getItem('userInfo')) ? true: false
+      if(isLogin){
+      getCartadd({
+        uid: JSON.parse(sessionStorage.getItem("userInfo")).uid,
+        goodsid: this.$route.query.id,
+        num: this.num,
+      }).then((res) => {
+        if (res.data.code == 200) {
+          Toast(res.data.msg);
+        } else {
+          Toast(res.data.msg);
+        }
+      });
+      }else{
+          Toast('请先登录')
                 this.$router.push('/login')
       }
     }
